@@ -8,6 +8,9 @@ const csurf = require('csurf');
 const { isProduction } = require('./config/keys');
 
 require('./models/User');
+require('./config/passport'); // <-- ADD THIS LINE
+const passport = require('passport'); // <-- ADD THIS LINE
+
 
 const usersRouter = require('./routes/api/users'); // update the import file path
 const tweetsRouter = require('./routes/api/tweets');
@@ -24,6 +27,9 @@ app.use(cookieParser()); // parse cookies as an object on req.cookies
 app.use('/api/users', usersRouter); // update the path
 app.use('/api/tweets', tweetsRouter);
 app.use('/api/csrf', csrfRouter);
+
+// add this line right before the CORS and CSRF configurations
+app.use(passport.initialize());
 
 if (!isProduction) {
     // Enable CORS only in development because React will be on the React
