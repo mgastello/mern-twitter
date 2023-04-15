@@ -4,6 +4,7 @@ const User = mongoose.model('User');
 var express = require('express');
 var router = express.Router();
 const passport = require('passport');
+const { loginUser } = require('../../config/passport');
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
@@ -47,7 +48,7 @@ router.post('/register', async (req, res, next) => {
       try {
         newUser.hashedPassword = hashedPassword;
         const user = await newUser.save();
-        return res.json({ user });
+        return res.json(await loginUser(user)); // <-- THIS IS THE CHANGED LINE
       }
       catch (err) {
         next(err);
@@ -65,7 +66,7 @@ router.post('/login', async (req, res, next) => {
       err.errors = { email: "Invalid credentials" };
       return next(err);
     }
-    return res.json({ user });
+    return res.json(await loginUser(user)); // <-- THIS IS THE CHANGED LINE
   })(req, res, next);
 });
 
