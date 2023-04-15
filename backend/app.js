@@ -7,6 +7,8 @@ const cors = require('cors');
 const csurf = require('csurf');
 const { isProduction } = require('./config/keys');
 
+require('./models/User');
+
 const usersRouter = require('./routes/api/users'); // update the import file path
 const tweetsRouter = require('./routes/api/tweets');
 const csrfRouter = require('./routes/api/csrf');
@@ -17,6 +19,11 @@ app.use(logger('dev')); // log request components (URL/method) to terminal
 app.use(express.json()); // parse JSON request body
 app.use(express.urlencoded({ extended: false })); // parse urlencoded request body
 app.use(cookieParser()); // parse cookies as an object on req.cookies
+
+// Attach Express routers
+app.use('/api/users', usersRouter); // update the path
+app.use('/api/tweets', tweetsRouter);
+app.use('/api/csrf', csrfRouter);
 
 if (!isProduction) {
     // Enable CORS only in development because React will be on the React
@@ -37,10 +44,6 @@ app.use(
     })
 );
 
-// Attach Express routers
-app.use('/api/users', usersRouter); // update the path
-app.use('/api/tweets', tweetsRouter);
-app.use('/api/csrf', csrfRouter);
 
 // Express custom middleware for catching all unmatched requests and formatting
 // a 404 error to be sent as the response.
