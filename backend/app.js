@@ -9,6 +9,7 @@ const { isProduction } = require('./config/keys');
 
 require('./models/User');
 require('./config/passport'); // <-- ADD THIS LINE
+require('./models/Tweet'); // <--ADD THIS LINE
 const passport = require('passport'); // <-- ADD THIS LINE
 
 const usersRouter = require('./routes/api/users'); // update the import file path
